@@ -1,0 +1,76 @@
+name: Build App (Windows + Android)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Tauri (Windows)
+        run: npx tauri build
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: src-tauri/target/release/bundle/
+
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Android dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y openjdk-17-jdk
+
+      - name: Build Android APK (experimental)
+        run: |
+          echo "APK NON FONCTIONNEL - BUILD EXPERIMENTAL" > WARNING.txt
+          npx tauri android build || echo "Android build failed but continuing"
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-NON-FONCTIONNEL
+          path: |
+            src-tauri/gen/android/app/build/outputs/
+            WARNING.txt
