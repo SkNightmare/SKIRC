@@ -1,70 +1,58 @@
-name: Build App (Tauri Windows + Android)
-
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-
-jobs:
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build Tauri (Windows)
-        run: npx tauri build
-
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: src-tauri/target/release/bundle/
-
-  build-android:
+  update-release:
+    needs: build-windows
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
         with:
-          node-version: 18
+          name: windows-build
+          path: build/
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install Java (Android)
-        run: |
-          sudo apt update
-          sudo apt install -y openjdk-17-jdk
-
-      - name: Build Android APK (NON FONCTIONNEL)
-        run: |
-          echo "APK NON FONCTIONNEL - BUILD EXPERIMENTAL" > WARNING.txt
-          npx tauri android build || echo "Android build failed but continuing"
-
-      - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
+      - name: Get target release (prerelease first)
+        id: get_release
+        uses: actions/github-script@v7
         with:
-          name: android-apk-NON-FONCTIONNEL
-          path: |
-            src-tauri/gen/android/app/build/outputs/
-            WARNING.txt
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            let latest = releases.data.find(r => r.prerelease);
+            if (!latest) {
+              latest = releases.data.find(r => !r.prerelease);
+            }
+
+            if (!latest) {
+              core.setFailed("No release or prerelease found. Create at least one manually.");
+              return;
+            }
+
+            core.setOutput("release_id", latest.id);
+
+      - name: Delete old assets
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const release_id = ${{ steps.get_release.outputs.release_id }};
+            const assets = await github.rest.repos.listReleaseAssets({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id
+            });
+
+            for (const asset of assets.data) {
+              await github.rest.repos.deleteReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                asset_id: asset.id
+              });
+            }
+
+      - name: Upload new assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
