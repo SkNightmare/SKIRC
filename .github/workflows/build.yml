@@ -24,7 +24,6 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      # 🔥 FIX ICI
       - name: Build Tauri (Windows)
         run: npx tauri build
 
