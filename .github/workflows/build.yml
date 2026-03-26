@@ -1,4 +1,4 @@
-name: Build App (Windows + Android)
+name: Build App (Tauri Windows + Android)
 
 on:
   push:
@@ -21,12 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build frontend
-        run: npm run build
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      # 🔥 FIX ICI
       - name: Build Tauri (Windows)
         run: npx tauri build
 
@@ -51,18 +49,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build frontend
-        run: npm run build
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Android dependencies
+      - name: Install Java (Android)
         run: |
           sudo apt update
           sudo apt install -y openjdk-17-jdk
 
-      - name: Build Android APK (experimental)
+      - name: Build Android APK (NON FONCTIONNEL)
         run: |
           echo "APK NON FONCTIONNEL - BUILD EXPERIMENTAL" > WARNING.txt
           npx tauri android build || echo "Android build failed but continuing"
