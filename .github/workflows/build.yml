@@ -80,7 +80,7 @@ jobs:
           name: windows-build
           path: build/
 
-      - name: Get latest release chronologically
+      - name: Get latest release tag
         id: get_release
         uses: actions/github-script@v7
         with:
@@ -91,7 +91,7 @@ jobs:
             });
 
             if (releases.data.length === 0) {
-              core.setFailed("No release found. Create at least one manually.");
+              core.setFailed("No release or prerelease found. Create at least one manually with a tag.");
               return;
             }
 
@@ -99,13 +99,21 @@ jobs:
             releases.data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 
             const latest = releases.data[0];
-            core.setOutput("release_id", latest.id);
+            console.log(`Latest release tag: ${latest.tag_name}`);
+            core.setOutput("release_tag", latest.tag_name);
 
-      - name: Delete old assets
+      - name: Delete old assets from latest release
         uses: actions/github-script@v7
         with:
           script: |
-            const release_id = ${{ steps.get_release.outputs.release_id }};
+            const release = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: '${{ steps.get_release.outputs.release_tag }}'
+            });
+
+            const release_id = release.data.id;
+
             const assets = await github.rest.repos.listReleaseAssets({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -123,6 +131,7 @@ jobs:
       - name: Upload new assets to latest release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.get_release.outputs.release_tag }}
           files: build/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
