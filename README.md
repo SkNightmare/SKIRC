@@ -116,9 +116,9 @@ sont accessibles dans ce dossier.
 
 ## Recommandations
 
-* ✔️ Modifier le code source avant compilation (meilleure stabilité)
-* ✔️ Utiliser `dist/` pour des modifications rapides ou du modding
-* ❌ Éviter de modifier directement en production sans backup
+* Modifier le code source avant compilation (meilleure stabilité)
+* Utiliser `dist/` pour des modifications rapides ou du modding
+* Éviter de modifier directement en production sans backup
 
 ---
 
