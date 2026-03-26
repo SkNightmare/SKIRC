@@ -1,0 +1,16 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capacités par défaut pour l'application",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "core:event:default",
+    "core:window:default",
+    "core:webview:default",
+    "core:path:default",
+    "log:default"
+  ]
+}

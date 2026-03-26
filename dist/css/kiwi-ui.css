@@ -1,0 +1,533 @@
+/* ──────────────────────────────────────────────
+   KIWI-UI.CSS — Interface KiwiIRC Desktop
+   ────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Variables thème clair ── */
+:root {
+    --kiwi-bg:           #f5f5f5;
+    --kiwi-sidebar-bg:   #2c2c3a;
+    --kiwi-sidebar-text: #b8b8cc;
+    --kiwi-sidebar-active-bg: #3a3a50;
+    --kiwi-sidebar-active-border: #6688ff;
+    --kiwi-main-bg:      #ffffff;
+    --kiwi-header-bg:    #ffffff;
+    --kiwi-header-border: #e0e0e0;
+    --kiwi-text:         #1a1a2e;
+    --kiwi-text-muted:   #888899;
+    --kiwi-input-bg:     #f0f0f8;
+    --kiwi-input-border: #d0d0e0;
+    --kiwi-accent:       #4a6fff;
+    --kiwi-accent-hover: #3355dd;
+    --kiwi-unread:       #ff4455;
+    --kiwi-mention-bg:   #fff8e6;
+    --kiwi-mention-border: #cc9900;
+    --kiwi-away-bg:      #fffae0;
+    --kiwi-away-border:  #e0c000;
+    --kiwi-nl-bg:        #fafafa;
+    --kiwi-nl-border:    #e0e0e0;
+    --kiwi-border:       #e0e0e0;
+    --kiwi-system-color: #999aaa;
+    --kiwi-time-color:   #aaaacc;
+    --kiwi-conn-bg:      #f0f0fa;
+    --kiwi-popup-bg:     #ffffff;
+    --kiwi-popup-border: #ccccdd;
+    --kiwi-popup-shadow: rgba(0,0,0,0.2);
+}
+
+/* ── Variables thème sombre ── */
+html.kiwi-dark {
+    --kiwi-bg:           #1a1a2e;
+    --kiwi-sidebar-bg:   #0d0d1a;
+    --kiwi-sidebar-text: #8888aa;
+    --kiwi-sidebar-active-bg: #1a1a3a;
+    --kiwi-sidebar-active-border: #5588ff;
+    --kiwi-main-bg:      #12121f;
+    --kiwi-header-bg:    #16162a;
+    --kiwi-header-border: #2a2a4a;
+    --kiwi-text:         #c8c8d8;
+    --kiwi-text-muted:   #666688;
+    --kiwi-input-bg:     #1a1a2e;
+    --kiwi-input-border: #3a3a5a;
+    --kiwi-accent:       #5588ff;
+    --kiwi-accent-hover: #6699ff;
+    --kiwi-unread:       #ff5566;
+    --kiwi-mention-bg:   #2a1800;
+    --kiwi-mention-border:#cc8800;
+    --kiwi-away-bg:      #2a2200;
+    --kiwi-away-border:  #6a5a00;
+    --kiwi-nl-bg:        #0d0d1a;
+    --kiwi-nl-border:    #2a2a4a;
+    --kiwi-border:       #2a2a4a;
+    --kiwi-system-color: #555577;
+    --kiwi-time-color:   #444466;
+    --kiwi-conn-bg:      #0d0d1a;
+    --kiwi-popup-bg:     #1a1a2e;
+    --kiwi-popup-border: #3a3a5a;
+    --kiwi-popup-shadow: rgba(0,0,0,0.5);
+}
+
+html, body {
+    height: 100%; width: 100%;
+    overflow: hidden;
+    background: var(--kiwi-bg);
+    color: var(--kiwi-text);
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+/* ── Root ── */
+.kiwi-root {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.kiwi-sidebar {
+    width: 200px;
+    min-width: 160px;
+    background: var(--kiwi-sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.kiwi-server-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+.kiwi-server-list::-webkit-scrollbar { width: 4px; }
+.kiwi-server-list::-webkit-scrollbar-track { background: transparent; }
+.kiwi-server-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.kiwi-chan-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+    color: var(--kiwi-sidebar-text);
+    border-left: 2px solid transparent;
+    font-size: 13px;
+    min-height: 32px;
+    position: relative;
+    transition: background 0.1s;
+}
+.kiwi-chan-item:hover { background: rgba(255,255,255,0.05); color: #ffffff; }
+.kiwi-chan-item.active {
+    background: var(--kiwi-sidebar-active-bg);
+    border-left-color: var(--kiwi-sidebar-active-border);
+    color: #ffffff;
+}
+.kiwi-chan-item.has-unread { color: #ffcc44; border-left-color: var(--kiwi-unread); }
+
+.kiwi-chan-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kiwi-dot { width: 8px; height: 8px; border-radius: 50%; background: #44cc88; flex-shrink: 0; box-shadow: 0 0 4px #44cc88; }
+
+.kiwi-unread-badge {
+    background: var(--kiwi-unread);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 8px;
+    min-width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.kiwi-close-tab {
+    opacity: 0;
+    color: #888;
+    font-size: 11px;
+    padding: 0 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.kiwi-chan-item:hover .kiwi-close-tab { opacity: 1; }
+.kiwi-close-tab:hover { color: #ff5555; }
+
+/* Barre de connexion dans la sidebar */
+.kiwi-conn-bar {
+    background: var(--kiwi-conn-bg);
+    border-top: 1px solid var(--kiwi-border);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+.kiwi-conn-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+.kiwi-conn-row label { color: var(--kiwi-text-muted); min-width: 50px; flex-shrink: 0; font-size: 11px; }
+.kiwi-conn-row input[type=text],
+.kiwi-conn-row input[type=number] {
+    flex: 1;
+    background: var(--kiwi-input-bg);
+    border: 1px solid var(--kiwi-input-border);
+    color: var(--kiwi-text);
+    padding: 4px 6px;
+    font-size: 12px;
+    font-family: inherit;
+    border-radius: 3px;
+    outline: none;
+    min-width: 0;
+}
+.kiwi-conn-row input:focus { border-color: var(--kiwi-accent); }
+.kiwi-conn-row input[type=number] { flex: none; width: 65px; }
+
+#kiwi-connect-btn {
+    background: var(--kiwi-accent);
+    border: none;
+    color: #fff;
+    padding: 6px 0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: inherit;
+    width: 100%;
+}
+#kiwi-connect-btn:hover { background: var(--kiwi-accent-hover); }
+
+/* ── Zone principale ── */
+.kiwi-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+    background: var(--kiwi-main-bg);
+}
+
+/* Header */
+.kiwi-header {
+    height: 44px;
+    background: var(--kiwi-header-bg);
+    border-bottom: 1px solid var(--kiwi-header-border);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.kiwi-header-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--kiwi-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.kiwi-header-topic {
+    flex: 1;
+    font-size: 12px;
+    color: var(--kiwi-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.kiwi-header-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.kiwi-icon-btn {
+    background: transparent;
+    border: 1px solid var(--kiwi-border);
+    color: var(--kiwi-text-muted);
+    padding: 3px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+.kiwi-icon-btn:hover { background: var(--kiwi-input-bg); color: var(--kiwi-text); }
+
+/* Away bar */
+.kiwi-away-bar {
+    background: var(--kiwi-away-bg);
+    border-bottom: 1px solid var(--kiwi-away-border);
+    color: #997700;
+    padding: 5px 12px;
+    font-size: 13px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+html.kiwi-dark .kiwi-away-bar { color: #cc9900; }
+#kiwi-back-btn {
+    background: var(--kiwi-accent);
+    border: none;
+    color: #fff;
+    padding: 2px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+/* Messages */
+.kiwi-messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 12px;
+    min-height: 0;
+    background: var(--kiwi-main-bg);
+}
+.kiwi-messages::-webkit-scrollbar { width: 6px; }
+.kiwi-messages::-webkit-scrollbar-track { background: transparent; }
+.kiwi-messages::-webkit-scrollbar-thumb { background: var(--kiwi-border); border-radius: 3px; }
+
+.kiwi-line {
+    display: flex;
+    gap: 8px;
+    padding: 3px 0;
+    align-items: flex-start;
+    line-height: 1.5;
+}
+.kiwi-line.kiwi-system { color: var(--kiwi-system-color); font-style: italic; font-size: 13px; padding-left: 36px; }
+.kiwi-line.kiwi-mention { background: var(--kiwi-mention-bg); border-left: 3px solid var(--kiwi-mention-border); padding-left: 9px; margin-left: -12px; padding-right: 0; }
+.kiwi-line.kiwi-self .kiwi-nick { color: #44aa66 !important; }
+
+.kiwi-av {
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    overflow: hidden;
+}
+
+.kiwi-msg-body { flex: 1; min-width: 0; }
+.kiwi-nick {
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 6px;
+}
+.kiwi-nick:hover { text-decoration: underline; }
+.kiwi-time { font-size: 11px; color: var(--kiwi-time-color); margin-right: 6px; }
+.kiwi-text { font-size: 14px; color: var(--kiwi-text); word-break: break-word; display: inline; }
+
+/* Tab completion */
+.kiwi-tab-bar {
+    background: var(--kiwi-input-bg);
+    border-top: 1px solid var(--kiwi-border);
+    padding: 5px 8px;
+    display: none;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    flex-shrink: 0;
+}
+.kiwi-tab-bar::-webkit-scrollbar { display: none; }
+
+.kiwi-tab-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--kiwi-main-bg);
+    border: 1px solid var(--kiwi-border);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    color: var(--kiwi-text-muted);
+}
+.kiwi-tab-chip.active { background: var(--kiwi-accent); color: #fff; border-color: var(--kiwi-accent); }
+
+/* Color picker */
+.kiwi-color-picker {
+    background: var(--kiwi-input-bg);
+    border-top: 1px solid var(--kiwi-border);
+    padding: 8px 10px;
+    flex-shrink: 0;
+}
+.kiwi-color-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+.kiwi-color-swatch {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    transition: transform 0.1s;
+}
+.kiwi-color-swatch:hover { transform: scale(1.1); border-color: rgba(255,255,255,0.5); }
+.kiwi-color-utils { display: flex; gap: 6px; }
+.kiwi-color-utils button {
+    flex: 1;
+    background: var(--kiwi-main-bg);
+    border: 1px solid var(--kiwi-border);
+    color: var(--kiwi-text-muted);
+    padding: 4px 0;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.kiwi-color-utils button:hover { background: var(--kiwi-input-bg); }
+
+/* Input bar */
+.kiwi-input-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 8px 10px;
+    border-top: 1px solid var(--kiwi-border);
+    background: var(--kiwi-header-bg);
+    flex-shrink: 0;
+}
+.kiwi-input-av {
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+.kiwi-input {
+    flex: 1;
+    background: var(--kiwi-input-bg);
+    border: 1px solid var(--kiwi-input-border);
+    color: var(--kiwi-text);
+    padding: 7px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    border-radius: 20px;
+    outline: none;
+    resize: none;
+    max-height: 120px;
+    line-height: 1.4;
+    overflow-y: auto;
+    min-width: 0;
+    transition: border-color 0.15s;
+}
+.kiwi-input:focus { border-color: var(--kiwi-accent); }
+.kiwi-input::placeholder { color: var(--kiwi-text-muted); }
+.kiwi-send-btn {
+    background: var(--kiwi-accent);
+    border: none;
+    color: #fff;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 16px;
+    font-family: inherit;
+    flex-shrink: 0;
+    margin-bottom: 1px;
+    white-space: nowrap;
+}
+.kiwi-send-btn:hover { background: var(--kiwi-accent-hover); }
+
+/* ── Nicklist ── */
+.kiwi-nicklist {
+    width: 180px;
+    background: var(--kiwi-nl-bg);
+    border-left: 1px solid var(--kiwi-nl-border);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 0;
+    flex-shrink: 0;
+}
+.kiwi-nicklist::-webkit-scrollbar { width: 4px; }
+.kiwi-nicklist::-webkit-scrollbar-thumb { background: var(--kiwi-border); border-radius: 2px; }
+
+.kiwi-nl-empty { padding: 10px; color: var(--kiwi-text-muted); font-size: 12px; text-align: center; }
+.kiwi-nl-group {
+    padding: 8px 10px 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--kiwi-text-muted);
+}
+.kiwi-nl-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    min-height: 30px;
+    font-size: 13px;
+}
+.kiwi-nl-item:hover { background: var(--kiwi-input-bg); }
+.kiwi-nl-prefix { font-size: 11px; font-weight: 700; min-width: 10px; flex-shrink: 0; }
+.kiwi-nl-prefix.op  { color: #e67e22; }
+.kiwi-nl-prefix.hop { color: #8e44ad; }
+.kiwi-nl-prefix.vop { color: #27ae60; }
+.kiwi-nl-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Popup profil ── */
+.kiwi-popup {
+    position: absolute;
+    right: 196px;
+    top: 50px;
+    background: var(--kiwi-popup-bg);
+    border: 1px solid var(--kiwi-popup-border);
+    border-radius: 8px;
+    padding: 14px;
+    min-width: 200px;
+    box-shadow: 0 4px 16px var(--kiwi-popup-shadow);
+    z-index: 1000;
+}
+.kiwi-popup-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.kiwi-popup-av {
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    overflow: hidden;
+}
+.kiwi-popup-nick { font-size: 15px; font-weight: 700; }
+.kiwi-popup-info { font-size: 12px; color: var(--kiwi-text-muted); margin-top: 2px; }
+.kiwi-popup-actions button {
+    width: 100%;
+    background: var(--kiwi-accent);
+    border: none;
+    color: #fff;
+    padding: 7px 0;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+}
+.kiwi-popup-actions button:hover { background: var(--kiwi-accent-hover); }
