@@ -95,7 +95,7 @@ jobs:
               return;
             }
 
-            // Trier par date de publication décroissante pour prendre la plus récente
+            // Trier par date de publication décroissante
             releases.data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 
             const latest = releases.data[0];
@@ -134,4 +134,4 @@ jobs:
           tag_name: ${{ steps.get_release.outputs.release_tag }}
           files: build/**/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
