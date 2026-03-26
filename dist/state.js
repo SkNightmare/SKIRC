@@ -8,7 +8,7 @@ export const state = {
   currentServer: null,
   currentContextTarget: null,
   currentContextType: null,
-  realname: "JCIRC User",
+  realname: "SKIRC User",
   blocked: [],
   blockAll: false,
   friends: [],
@@ -40,7 +40,7 @@ export const state = {
   defaultHost: "irc.chaat.fr",
   defaultPort: "6697",
   defaultSsl:  true,
-  defaultNick: "JCIRC_User",
+  defaultNick: "SKIRC_User",
 
   // ── Auto-reply sur mention ────────────────────────────────────
   // autoReplyEnabled : bool — active/désactive le mention reply

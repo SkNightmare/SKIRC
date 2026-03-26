@@ -180,13 +180,13 @@ export function renderKiwi(){
                 <div class="kiwi-conn-row"><label>Serveur</label><input id="kiwi-host" value="${state.defaultHost||'irc.chaat.fr'}" autocomplete="off"></div>
                 <div class="kiwi-conn-row"><label>Port</label><input id="kiwi-port" type="number" value="${state.defaultPort||'6697'}" style="width:70px;">
                 <label style="margin-left:8px;"><input type="checkbox" id="kiwi-ssl" ${(state.defaultSsl!==false)?'checked':''}> SSL</label></div>
-                <div class="kiwi-conn-row"><label>Pseudo</label><input id="kiwi-nick" value="${state.defaultNick||'JCIRC_User'}" autocomplete="off"></div>
+                <div class="kiwi-conn-row"><label>Pseudo</label><input id="kiwi-nick" value="${state.defaultNick||'SKIRC_User'}" autocomplete="off"></div>
                 <button id="kiwi-connect-btn">Connexion</button>
             </div>
         </div>
         <div class="kiwi-main">
             <div class="kiwi-header">
-                <div class="kiwi-header-name" id="kiwi-header-name">JCIRC</div>
+                <div class="kiwi-header-name" id="kiwi-header-name">SKIRC</div>
                 <div class="kiwi-header-topic" id="kiwi-header-topic"></div>
                 <div class="kiwi-header-actions">
                     <button class="kiwi-icon-btn" id="kiwi-conn-toggle" title="Connexion">+/-</button>
@@ -256,7 +256,7 @@ function updateKiwi(){
 
     // Header
     const hn=document.getElementById('kiwi-header-name'),ht=document.getElementById('kiwi-header-topic');
-    if(hn){if(type==='channel')hn.textContent=t||'—';else if(type==='pm')hn.innerHTML=`<span style="color:${genderColor(t||'')}">${t||'—'}</span>`;else hn.textContent=s||'JCIRC';}
+    if(hn){if(type==='channel')hn.textContent=t||'—';else if(type==='pm')hn.innerHTML=`<span style="color:${genderColor(t||'')}">${t||'—'}</span>`;else hn.textContent=s||'SKIRC';}
     if(ht){const nicks=(type==='channel'&&s&&t)?(state.nicks[s]?.[t]||[]):[];ht.textContent=type==='channel'?`${nicks.length} utilisateurs`:type==='pm'?(()=>{const p=t?state.userProfiles?.[t.toLowerCase()]:null;return p?[p.age?`${p.age} ans`:null,p.gender?(p.gender==='m'?'Homme':'Femme'):null,p.city||null].filter(Boolean).join(' · '):''})():'';}
 
     // Sidebar

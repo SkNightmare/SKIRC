@@ -35,7 +35,7 @@ export function renderAdiirc(){
                 <input id="ai-host" value="${state.defaultHost||'irc.chaat.fr'}" placeholder="serveur" autocomplete="off">
                 <input id="ai-port" type="number" value="${state.defaultPort||'6697'}" placeholder="port" style="width:60px;">
                 <label><input type="checkbox" id="ai-ssl" ${(state.defaultSsl!==false)?'checked':''}> SSL</label>
-                <input id="ai-nick" value="${state.defaultNick||'JCIRC_User'}" placeholder="pseudo" autocomplete="off">
+                <input id="ai-nick" value="${state.defaultNick||'SKIRC_User'}" placeholder="pseudo" autocomplete="off">
                 <button id="ai-connect">Connexion</button>
             </div>
             <div class="adiirc-away-bar" id="adiirc-away-bar" style="display:none;"></div>

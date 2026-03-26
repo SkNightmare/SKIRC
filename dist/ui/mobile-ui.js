@@ -129,7 +129,7 @@ export function renderMobile(){
     <div class="m-main" id="m-main">
         <div class="m-header">
             <button class="m-burger" id="m-burger"><span></span><span></span><span></span></button>
-            <div class="m-header-center"><div class="m-header-name" id="m-header-name">JCIRC</div><div class="m-header-sub" id="m-header-sub"></div></div>
+            <div class="m-header-center"><div class="m-header-name" id="m-header-name">SKIRC</div><div class="m-header-sub" id="m-header-sub"></div></div>
             <button class="m-header-btn" id="m-nicklist-btn" style="display:none;" title="Utilisateurs">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </button>
@@ -176,7 +176,7 @@ export function renderMobile(){
 
     // Pre-remplit depuis state/config
     const hostEl=document.getElementById("m-conn-host"),portEl=document.getElementById("m-conn-port"),sslEl=document.getElementById("m-conn-ssl"),nickEl=document.getElementById("m-conn-nick");
-    if(hostEl)hostEl.value=state.defaultHost||"irc.chaat.fr";if(portEl)portEl.value=state.defaultPort||"6697";if(sslEl)sslEl.checked=state.defaultSsl!==false;if(nickEl)nickEl.value=state.defaultNick||"JCIRC_User";
+    if(hostEl)hostEl.value=state.defaultHost||"irc.chaat.fr";if(portEl)portEl.value=state.defaultPort||"6697";if(sslEl)sslEl.checked=state.defaultSsl!==false;if(nickEl)nickEl.value=state.defaultNick||"SKIRC_User";
 
     document.getElementById("m-conn-toggle").onclick=()=>{const panel=document.getElementById("m-conn-panel"),isVisible=panel.style.display!=='none';panel.style.display=isVisible?'none':'block';document.getElementById("m-conn-toggle").textContent=isVisible?'+':'x';};
     document.getElementById("m-conn-go").onclick=()=>{
@@ -237,7 +237,7 @@ function updateMobileUI(){
     const headerName=document.getElementById("m-header-name"),headerSub=document.getElementById("m-header-sub");
     const nlBtn=document.getElementById("m-nicklist-btn");
     const nicks=(type==='channel'&&s&&t)?(state.nicks[s]?.[t]||[]):[];
-    if(headerName){if(type==='channel')headerName.textContent=t||"—";else if(type==='pm')headerName.innerHTML=`<span style="color:${genderColor(t||'')}">${t||"—"}</span>`;else headerName.textContent=s||"JCIRC";}
+    if(headerName){if(type==='channel')headerName.textContent=t||"—";else if(type==='pm')headerName.innerHTML=`<span style="color:${genderColor(t||'')}">${t||"—"}</span>`;else headerName.textContent=s||"SKIRC";}
     if(headerSub){if(type==='channel')headerSub.textContent=`${nicks.length} utilisateurs`;else if(type==='pm'){const p=t?state.userProfiles?.[t.toLowerCase()]:null;headerSub.textContent=p?[p.age?`${p.age} ans`:null,p.gender?(p.gender==='m'?'Homme':'Femme'):null,p.city||null].filter(Boolean).join(' · '):""; }else headerSub.textContent="";}
     if(nlBtn)nlBtn.style.display=(type==='channel')?'flex':'none';
     document.getElementById("m-main")?.classList.toggle("m-server-view",type==='server');

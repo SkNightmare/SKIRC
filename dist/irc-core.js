@@ -70,7 +70,7 @@ function handleCTCP(serverId, senderNick, target, ctcp) {
     const myNick = state.connectedServers[serverId]?.nick || '';
 
     if (ctcp.type === 'VERSION') {
-        irc.sendRaw(serverId, `NOTICE ${senderNick} :\x01VERSION JCIRC 1.0 (Tauri)\x01`);
+        irc.sendRaw(serverId, `NOTICE ${senderNick} :\x01VERSION SKIRC 1.0 (Tauri)\x01`);
         return null; // ne pas afficher
     }
     if (ctcp.type === 'PING') {
@@ -367,7 +367,7 @@ class IRC {
             if (stem==='_server') state.serverLogs[serverId]=htmlLines;
             else if (stem.startsWith('#')) { if(!state.messages[serverId])state.messages[serverId]={}; state.messages[serverId][stem]=htmlLines; }
         });
-    } catch(e) { console.warn('[JCIRC] Logs:',e); }
+    } catch(e) { console.warn('[SKIRC] Logs:',e); }
   }
   async _loadPmLogs(serverId, nick) {
     try {
@@ -382,7 +382,7 @@ class IRC {
         const lastTime=m?m[1]:null;
         const liveOnly=lastTime?existing.filter(msg=>{const tm=msg.match(/^\[(\d{2}:\d{2})\]/);if(!tm)return true;return tm[1]>lastTime;}):existing;
         state.privates[serverId][nick]=[...htmlLines,...liveOnly];
-    } catch(e) { console.warn('[JCIRC] PM logs:',e); }
+    } catch(e) { console.warn('[SKIRC] PM logs:',e); }
   }
 
   // ════════════════════════════════════════════════════════════
@@ -660,7 +660,7 @@ class IRC {
             let target=args[0]||(state.currentContextType==='channel'?state.currentContextTarget:null);
             if(target&&target.startsWith("#")){this.sendRaw(srv,`PART ${target}`);delete state.messages[srv][target];delete state.nicks[srv][target];if(state.unread[srv])delete state.unread[srv][target];this._purgeWhoisQueue(srv);state.currentContextTarget=srv;state.currentContextType='server';}
         } else if (cmd==="QUIT") {
-            this._cancelReconnect(srv);this.sendRaw(srv,`QUIT :${args.join(" ")||"JCIRC"}`);this.disconnectServer(srv);return;
+            this._cancelReconnect(srv);this.sendRaw(srv,`QUIT :${args.join(" ")||"SKIRC"}`);this.disconnectServer(srv);return;
         } else if (cmd==="MSG"||cmd==="QUERY") {
             const target=args[0],msgText=args.slice(1).join(" ");
             if(target){if(!state.privates[srv])state.privates[srv]={};if(!state.privates[srv][target])state.privates[srv][target]=[];state.currentContextTarget=target;state.currentContextType='pm';if(state.unread[srv])state.unread[srv][target]=0;if(!state.userProfiles[target.toLowerCase()])this.queueWhoisDirect(srv,target);const pmKey=`${srv}::${target.toLowerCase()}`;if(!this._pmLogsLoaded.has(pmKey)){this._pmLogsLoaded.add(pmKey);this._loadPmLogs(srv,target).then(()=>update());}if(msgText)this.sendMessage(target,msgText);else update();}
