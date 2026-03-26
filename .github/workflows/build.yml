@@ -1,3 +1,74 @@
+name: Build + Update Latest Release
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Tauri (Windows)
+        run: npx tauri build
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: src-tauri/target/release/bundle/
+
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Java (Android)
+        run: |
+          sudo apt update
+          sudo apt install -y openjdk-17-jdk
+
+      - name: Build Android APK (NON FONCTIONNEL)
+        run: |
+          echo "APK NON FONCTIONNEL - BUILD EXPERIMENTAL" > WARNING.txt
+          npx tauri android build || echo "Android build failed but continuing"
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-NON-FONCTIONNEL
+          path: |
+            src-tauri/gen/android/app/build/outputs/
+            WARNING.txt
+
   update-release:
     needs: build-windows
     runs-on: ubuntu-latest
@@ -9,7 +80,7 @@
           name: windows-build
           path: build/
 
-      - name: Get target release (prerelease first)
+      - name: Get latest release chronologically
         id: get_release
         uses: actions/github-script@v7
         with:
@@ -19,16 +90,15 @@
               repo: context.repo.repo
             });
 
-            let latest = releases.data.find(r => r.prerelease);
-            if (!latest) {
-              latest = releases.data.find(r => !r.prerelease);
-            }
-
-            if (!latest) {
-              core.setFailed("No release or prerelease found. Create at least one manually.");
+            if (releases.data.length === 0) {
+              core.setFailed("No release found. Create at least one manually.");
               return;
             }
 
+            // Trier par date de publication décroissante pour prendre la plus récente
+            releases.data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+
+            const latest = releases.data[0];
             core.setOutput("release_id", latest.id);
 
       - name: Delete old assets
@@ -50,7 +120,7 @@
               });
             }
 
-      - name: Upload new assets to release
+      - name: Upload new assets to latest release
         uses: softprops/action-gh-release@v2
         with:
           files: build/**/*
