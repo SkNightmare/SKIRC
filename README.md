@@ -171,5 +171,5 @@ Les contributions sont les bienvenues !
 
 Projet développé par Jcc74
 
-## Vue (test With My Profile)
-<img src="https://count.getloli.com/@SkNightMare?name=SkNightMare&theme=rule34"> <br/>
+## Vue
+<img src="https://count.getloli.com/@SKIRC?name=SkNightMare&theme=rule34"> <br/>
