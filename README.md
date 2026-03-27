@@ -10,6 +10,7 @@
 
 Ce projet est une application basée sur **Tauri** avec une interface web.
 Il inclut un système modifiable permettant d’ajouter des plugins et de modifier le comportement de l’application directement depuis les fichiers compilés.
+Ce a pour but d'avoir un IRC-CORE CrossPlatforme afin d'avoir 1 code pour tout les platforme.
 
 ---
 
