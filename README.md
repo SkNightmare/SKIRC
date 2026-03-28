@@ -62,20 +62,10 @@ npx run dev
 
 ---
 
-### Build (Web)
-
-Compile l'application :
-
-```bash
-npx run build
-```
-
----
-
 ### Build Desktop (Tauri)
 
 ```bash
-tauri build
+npx run build
 ```
 
 ---
