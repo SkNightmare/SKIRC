@@ -12,6 +12,16 @@ Ce projet est une application basée sur **Tauri** avec une interface web.
 Il inclut un système modifiable permettant d’ajouter des plugins et de modifier le comportement de l’application directement depuis les fichiers compilés.
 Ce a pour but d'avoir un IRC-CORE CrossPlatforme afin d'avoir 1 code pour tout les platforme.
 
+
+---
+
+## Preview
+
+<p align="center">
+  <img src="PREVIEW/01.png" width="600">
+</p>
+
+
 ---
 
 
@@ -164,3 +174,6 @@ Projet développé par Jcc74
 
 ## Vue
 <img src="https://count.getloli.com/@SKIRC?name=SkNightMare&theme=rule34"> <br/>
+
+
+
